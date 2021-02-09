@@ -1,0 +1,3 @@
+[console_scripts]
+clistock = clistock.__main__:main
+
