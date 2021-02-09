@@ -8,6 +8,9 @@ pip install e .
 For running the unit test use below line in “pycli-master\clistock” directory:
 python -m unittest test_funcmodule.py
 which will result as:
+
+ ![](clistock/unit_test_result.jpg)
+ 
  
 # Commands:
 To use the application below please consider to use following commands:
@@ -16,6 +19,8 @@ To draw a graph in terminal for a stock with given time interval use below lines
  + clistock time_stock_graph AAPL 2019-02-02
  + clistock time_stock_graph AAPL 2019-02-02 2020-02-02
  
+ ![](clistock/functionality_check_photos/hist_stock_graph.png)
+
 
 Also following line to make the graph for exchange historical data:
  + clistock graph_hist_fx OANDA:GBP_USD
@@ -23,6 +28,8 @@ Also following line to make the graph for exchange historical data:
 To draw a graph based on the whole historical data of a stock with exchange affect following examples could be used. In case no exchange give, it uses the current values in USD:
  + clistock graph_hist_stock AAPL OANDA:GBP_USD
  
+ ![](clistock/functionality_check_photos/interval.jpg)
+
 
 Also following line to make the graph for exchange historical data:
  + clistock graph_hist_fx OANDA:GBP_USD
