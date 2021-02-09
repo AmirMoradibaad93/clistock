@@ -12,23 +12,23 @@ which will result as:
 # Commands:
 To use the application below please consider to use following commands:
 
-- To draw a graph in terminal for a stock with given time interval use below lines. In case end time of interval is not specified the application uses automatically the present time. Time and symbol is optional and could be defined by user but timing convention should be as examples below.
+To draw a graph in terminal for a stock with given time interval use below lines. In case end time of interval is not specified the application uses automatically the present time. Time and symbol is optional and could be defined by user but timing convention should be as examples below.
  + clistock time_stock_graph AAPL 2019-02-02
  + clistock time_stock_graph AAPL 2019-02-02 2020-02-02
  
 
-- Also following line to make the graph for exchange historical data:
+Also following line to make the graph for exchange historical data:
  + clistock graph_hist_fx OANDA:GBP_USD
 
-- To draw a graph based on the whole historical data of a stock with exchange affect following examples could be used. In case no exchange give, it uses the current values in USD:
+To draw a graph based on the whole historical data of a stock with exchange affect following examples could be used. In case no exchange give, it uses the current values in USD:
  + clistock graph_hist_stock AAPL OANDA:GBP_USD
  
 
-- Also following line to make the graph for exchange historical data:
+Also following line to make the graph for exchange historical data:
  + clistock graph_hist_fx OANDA:GBP_USD
  
 
-- To convert and print historical stock quotes in given foreign currencies:
+To convert and print historical stock quotes in given foreign currencies:
  + clistock print_historical AAPL OANDA:GBP_USD
 
 
