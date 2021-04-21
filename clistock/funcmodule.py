@@ -9,11 +9,11 @@ import math
 import plotille
 import numpy as np
 
-symbols = ['AAPL','GOOGL','TSLA','ARAO','HALFF','LNC','SFTBY','HITD','AVD','LGAH','PCDAF','JNSTF','CRUUF','CKGDF','FCRD','PBSV','EEH','SEOTF','SWMD','SBBP',
-				'XXFPL','GBLHF','BBRYF','TRIT','LSTYF','ERGN','UCBJF','STLM','DRNA','CNWT','REGI','XRAY','BAJFF','LRSNF','SBCF','HPCRF','ITMSF','SMTOY','CIXPF','LTMAQ','FLIA','RYTTF',
-				'ULUR','CODX','FLY','NCB','SFBS','CBSU','BLPFF','SVLPF','WTBDY','CRZBF','DBV','BYLTF','BIEL','SWDHY','SOSSF','NSRCF','FBZ','FIRRY','NNMIF','VPTV','WOW','OPT','COBAF',
-				'SRRK','AGXKF','CRFQF','SMMD','RDDTF','CIB','CPS','NXTH','VDOMF','PSTV','EVSV','HGRVF','FPAFY','KEWL','OBTEF','CGUD','SVNNF','TXCCQ','HENOY','FINV','ERILF','XMVM','FMAT',
-				'EHITF','BCBHF','KBH','FNB','GYNAF','EMSWF','SMGBF','GYYMF','UNPA','ECUI','MLVF']
+symbols = ['AAPL','GOOGL','TSLA']#,'ARAO','HALFF','LNC','SFTBY','HITD','AVD','LGAH','PCDAF','JNSTF','CRUUF','CKGDF','FCRD','PBSV','EEH','SEOTF','SWMD','SBBP',
+				#'XXFPL','GBLHF','BBRYF','TRIT','LSTYF','ERGN','UCBJF','STLM','DRNA','CNWT','REGI','XRAY','BAJFF','LRSNF','SBCF','HPCRF','ITMSF','SMTOY','CIXPF','LTMAQ','FLIA','RYTTF',
+				#'ULUR','CODX','FLY','NCB','SFBS','CBSU','BLPFF','SVLPF','WTBDY','CRZBF','DBV','BYLTF','BIEL','SWDHY','SOSSF','NSRCF','FBZ','FIRRY','NNMIF','VPTV','WOW','OPT','COBAF',
+				#'SRRK','AGXKF','CRFQF','SMMD','RDDTF','CIB','CPS','NXTH','VDOMF','PSTV','EVSV','HGRVF','FPAFY','KEWL','OBTEF','CGUD','SVNNF','TXCCQ','HENOY','FINV','ERILF','XMVM','FMAT',
+				#'EHITF','BCBHF','KBH','FNB','GYNAF','EMSWF','SMGBF','GYYMF','UNPA','ECUI','MLVF']
 	
 
 def my_function(args):
@@ -23,6 +23,9 @@ def my_function(args):
 	historical_data = get_historical_data(anagraphic_data)
 	anagraphic_data_fx = get_anagraphic_exch()
 	historical_data_fx = get_historical_data_fx(anagraphic_data_fx)
+	
+	if(args[0]=="test"):
+		test()
 	
 	if(args[0] == "time_stock_graph"):
 		if(len(args)<3):
@@ -168,3 +171,10 @@ def time_stock_graph(symb, first ,second = round(time.time() * 1000) ):
 	stock_data['t'] = stock_data['t'].map(lambda y: datetime.fromtimestamp(y).date())
 	stock_data = stock_data.loc[:,['symbol','c','t']]
 	print_graph(stock_data)
+
+def test():
+	base_url = 'https://finnhub.io/api/v1/company-news?'
+	r = requests.get(base_url, params = {'symbol': 'AAPL','token':'c0dff3n48v6sgrj2il4g', 'from':'2020-06-21', 'to':'2020-06-25'})
+	text = r.text
+	company_news = json.loads(text)
+	print(company_news[0])
