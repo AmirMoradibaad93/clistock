@@ -24,8 +24,13 @@ def my_function(args):
 	anagraphic_data_fx = get_anagraphic_exch()
 	historical_data_fx = get_historical_data_fx(anagraphic_data_fx)
 	
-	if(args[0]=="test"):
-		test()
+	if(args[0]=="crypto_symbols"):
+		crypto_symbols()
+	
+	if(args[0]=="crypto"):
+		crypto(args)
+	
+	
 	
 	if(args[0] == "time_stock_graph"):
 		if(len(args)<3):
@@ -178,3 +183,26 @@ def test():
 	text = r.text
 	company_news = json.loads(text)
 	print(company_news[0])
+
+def crypto_symbols():
+	url = 'https://finnhub.io/api/v1/crypto/symbol?exchange=binance&token=c0dff3n48v6sgrj2il4g'
+	crypto_sym_all = requests.get(url)
+	crypto_sym = pd.DataFrame(crypto_sym_all.json())
+	print("befor writing to excel file")
+	crypto_sym.to_excel("output.xlsx")
+
+def crypto(args):
+	print(args)
+	print(len(args))
+	print(args[0])
+	symb=args[1]
+	res=args[2]
+	start=math.floor(datetime.strptime(args[3], '%Y-%m-%d').timestamp())
+	end =math.floor(datetime.strptime(args[4], '%Y-%m-%d').timestamp())
+	print(start)
+	print(end)
+	crypto_period = pd.DataFrame(requests.get('https://finnhub.io/api/v1/crypto/candle?symbol={s}&resolution={r}&from={f}&to={t}&token=c0dff3n48v6sgrj2il4g'.format(s=symb,r=res,f=start,t=end)).json())
+	crypto_period['t'] = crypto_period['t'].map(lambda y: datetime.fromtimestamp(y))
+	crypto_period.to_excel("output1.xlsx")
+	
+	
