@@ -192,17 +192,13 @@ def crypto_symbols():
 	crypto_sym.to_excel("output.xlsx")
 
 def crypto(args):
-	print(args)
-	print(len(args))
-	print(args[0])
 	symb=args[1]
 	res=args[2]
 	start=math.floor(datetime.strptime(args[3], '%Y-%m-%d').timestamp())
 	end =math.floor(datetime.strptime(args[4], '%Y-%m-%d').timestamp())
-	print(start)
-	print(end)
 	crypto_period = pd.DataFrame(requests.get('https://finnhub.io/api/v1/crypto/candle?symbol={s}&resolution={r}&from={f}&to={t}&token=c0dff3n48v6sgrj2il4g'.format(s=symb,r=res,f=start,t=end)).json())
 	crypto_period['t'] = crypto_period['t'].map(lambda y: datetime.fromtimestamp(y))
-	crypto_period.to_excel("output1.xlsx")
+	crypto_period.to_excel(str(str(symb) + ".xlsx").replace(":","_"))
+	
 	
 	
