@@ -5,6 +5,7 @@ import sys
 import datetime
 import time
 from datetime import datetime
+from datetime import timedelta
 import math
 import plotille
 import numpy as np
@@ -190,15 +191,46 @@ def crypto_symbols():
 	crypto_sym = pd.DataFrame(crypto_sym_all.json())
 	print("befor writing to excel file")
 	crypto_sym.to_excel("output.xlsx")
+	print(datetime.fromtimestamp(1583098857).date())
+	print(datetime.fromtimestamp(1584308457).date())
+	
 
 def crypto(args):
 	symb=args[1]
-	res=args[2]
-	start=math.floor(datetime.strptime(args[3], '%Y-%m-%d').timestamp())
-	end =math.floor(datetime.strptime(args[4], '%Y-%m-%d').timestamp())
-	crypto_period = pd.DataFrame(requests.get('https://finnhub.io/api/v1/crypto/candle?symbol={s}&resolution={r}&from={f}&to={t}&token=c0dff3n48v6sgrj2il4g'.format(s=symb,r=res,f=start,t=end)).json())
-	crypto_period['t'] = crypto_period['t'].map(lambda y: datetime.fromtimestamp(y))
-	crypto_period.to_excel(str(str(symb) + ".xlsx").replace(":","_"))
+	res=int(args[2])
 	
+	time_cont = 1
+	if(res == 60):
+		time_cont = 24
+	elif(res == 30 ):
+		time_cont = 48
+	elif(res == 15):
+		time_cont = 96
+	elif(res == 5):
+		time_cont = 192
+	elif(res == 1):
+		time_cont = 384
+	else:
+		time_cont =1
+		
+	beg_period = datetime.strptime(args[3], '%Y-%m-%d')
+	ending = datetime.strptime(args[4], '%Y-%m-%d')
+	days_diff = (ending-beg_period).days
+	rec_count = days_diff * time_cont
+	req_count = math.floor(rec_count / 500) +1
+	
+	crypto_all = pd.DataFrame()
+	for i in range(req_count):
+		end_period  = beg_period + timedelta(minutes = res*499)
+		if(i == req_count -1 ):
+			end_period  = ending
+		start = math.floor(beg_period.timestamp())
+		end = math.floor(end_period.timestamp())
+		crypto_period = pd.DataFrame(requests.get('https://finnhub.io/api/v1/crypto/candle?symbol={s}&resolution={r}&from={f}&to={t}&token=c0dff3n48v6sgrj2il4g'.format(s=symb,r=res,f=start,t=end)).json())
+		crypto_period['t'] = crypto_period['t'].map(lambda y: datetime.fromtimestamp(y))
+		crypto_all = pd.concat([crypto_all, crypto_period], ignore_index=True, sort=True)
+		beg_period = end_period + timedelta(minutes = res)
+	
+	crypto_all.to_excel(str(str(symb) + ".xlsx").replace(":","_"))
 	
 	
