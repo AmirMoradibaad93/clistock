@@ -212,9 +212,14 @@ def crypto(args):
 		time_cont = 384
 	else:
 		time_cont =1
-		
+	
 	beg_period = datetime.strptime(args[3], '%Y-%m-%d')
 	ending = datetime.strptime(args[4], '%Y-%m-%d')
+	indicator=""
+	if(len(args)==6):
+		indicator = args[5]
+		
+	print("below")
 	days_diff = (ending-beg_period).days
 	rec_count = days_diff * time_cont
 	req_count = math.floor(rec_count / 500) +1
@@ -226,11 +231,14 @@ def crypto(args):
 			end_period  = ending
 		start = math.floor(beg_period.timestamp())
 		end = math.floor(end_period.timestamp())
-		crypto_period = pd.DataFrame(requests.get('https://finnhub.io/api/v1/crypto/candle?symbol={s}&resolution={r}&from={f}&to={t}&token=c0dff3n48v6sgrj2il4g'.format(s=symb,r=res,f=start,t=end)).json())
+		print(start)
+		print(end)
+		crypto_period = pd.DataFrame(requests.get('https://finnhub.io/api/v1/crypto/candle?symbol={s}&resolution={r}&from={f}{indic}&to={t}&token=c0dff3n48v6sgrj2il4g'.format(s=symb,r=res,f=start,t=end,indic = indicator)).json())
 		crypto_period['t'] = crypto_period['t'].map(lambda y: datetime.fromtimestamp(y))
 		crypto_all = pd.concat([crypto_all, crypto_period], ignore_index=True, sort=True)
 		beg_period = end_period + timedelta(minutes = res)
 	
 	crypto_all.to_excel(str(str(symb) + ".xlsx").replace(":","_"))
 	
+
 	
