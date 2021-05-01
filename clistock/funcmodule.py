@@ -219,6 +219,8 @@ def crypto(args):
 	beg_period = datetime.strptime(args[3], '%Y-%m-%d')
 	ending = datetime.strptime(args[4], '%Y-%m-%d')
 	indicator="&"
+	if(len(args)==5):
+		indicator=""
 	count = 5
 	while(count < len(args)):
 		indicator = indicator + args[count] + "&"
