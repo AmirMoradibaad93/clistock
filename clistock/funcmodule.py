@@ -31,6 +31,9 @@ def my_function(args):
 	if(args[0]=="crypto"):
 		crypto(args)
 	
+	if(args[0]=="weather"):
+		weather()
+	
 	
 	
 	if(args[0] == "time_stock_graph"):
@@ -215,10 +218,12 @@ def crypto(args):
 	
 	beg_period = datetime.strptime(args[3], '%Y-%m-%d')
 	ending = datetime.strptime(args[4], '%Y-%m-%d')
-	indicator=""
-	if(len(args)==6):
-		indicator = args[5]
-		
+	indicator="&"
+	count = 5
+	while(count < len(args)):
+		indicator = indicator + args[count] + "&"
+		count= count+1
+	print(indicator)
 	print("below")
 	days_diff = (ending-beg_period).days
 	rec_count = days_diff * time_cont
@@ -241,4 +246,21 @@ def crypto(args):
 	crypto_all.to_excel(str(str(symb) + ".xlsx").replace(":","_"))
 	
 
-	
+def weather():
+	#sdates = ['2015-01-01','2015-02-01','2015-03-01','2015-04-01','2015-05-01','2015-06-01','2015-07-01','2015-08-01','2015-09-01','2015-10-01','2015-11-01','2015-12-01','2016-01-01','2016-02-01','2016-03-01','2016-04-01','2016-05-01','2016-06-01','2016-07-01','2016-08-01','2016-09-01','2016-10-01','2016-11-01','2016-12-01']
+	sdates = ['2017-01-01','2017-02-01','2017-03-01','2017-04-01','2017-05-01','2017-06-01','2017-07-01','2017-08-01','2017-09-01','2017-10-01','2017-11-01','2017-12-01','2018-01-01','2018-02-01','2018-03-01','2018-04-01','2018-05-01','2018-06-01','2018-07-01','2018-08-01','2018-09-01','2018-10-01','2018-11-01','2018-12-01']
+	#edates = ['2015-01-31','2015-02-31','2015-03-31','2015-04-31','2015-05-31','2015-06-31','2015-07-31','2015-08-31','2015-09-31','2015-10-31','2015-11-31','2015-12-31','2016-01-31','2016-02-31','2016-03-31','2016-04-31','2016-05-31','2016-06-31','2016-07-31','2016-08-31','2016-09-31','2016-10-31','2016-11-31','2016-12-31']
+	edates = ['2017-01-31','2017-02-31','2017-03-31','2017-04-31','2017-05-31','2017-06-31','2017-07-31','2017-08-31','2017-09-31','2017-10-31','2017-11-31','2017-12-31','2018-01-31','2018-02-31','2018-03-31','2018-04-31','2018-05-31','2018-06-31','2018-07-31','2018-08-31','2018-09-31','2018-10-31','2018-11-31','2018-12-31']
+	weat_all = pd.DataFrame()
+	print(len(sdates))
+	#for i in range(len)
+	for i in range(len(sdates)):
+		weat = pd.DataFrame(requests.get('http://api.worldweatheronline.com/premium/v1/past-weather.ashx?key=870c3fd02c8848aeaf7213957212704&q=Bilbao&format=json&date={s}&enddate={e}&tp=1'.format(s=sdates[i],e=edates[i])).json())
+		weat = weat.transpose()
+		weat = pd.DataFrame(weat['weather'])
+		weat = pd.DataFrame(weat.iloc[0]['weather'])
+		weat =weat.loc[:,['date','hourly']]
+		weat_all =pd.concat([weat_all, weat], ignore_index=True, sort=True)
+		
+	#weat = filter(lambda k: 'hourly' in k, weat)	
+	weat_all.to_excel("weather.xlsx")
